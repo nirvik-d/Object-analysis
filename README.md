@@ -17,13 +17,9 @@ A 3D visualization and analysis tool built with ArcGIS Maps SDK for JavaScript a
 
 ## Screenshots
 
+![image](https://github.com/user-attachments/assets/90da3c56-8c3b-46a0-a0de-4ba0880a8007)
+
 *1. Main application with analysis tools*
-
-<img width="959" alt="image" src="https://github.com/user-attachments/assets/analysis-main.png"/>
-
-*2. Area measurement analysis*
-
-<img width="959" alt="image" src="https://github.com/user-attachments/assets/analysis-area.png"/>
 
 ## Prerequisites
 
