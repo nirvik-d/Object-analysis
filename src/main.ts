@@ -1,140 +1,3 @@
-# Object Analysis
-
-A 3D visualization and analysis tool built with ArcGIS Maps SDK for JavaScript and Calcite Web Components, providing interactive tools for various spatial measurements and analyses in a 3D environment.
-
-## Features
-
-* **3D Visualization:** Interactive 3D scene using WebMercator spatial reference
-* **Analysis Tools:** Multiple tools for spatial measurements and analysis:
-  - Area Measurement: Calculate surface areas using polygons
-  - Direct Line Measurement: Measure distances between two points
-  - Line of Sight: Analyze visibility between observer and target points
-  - Viewshed: Calculate visible areas from observer positions
-  - Dimension: Measure lengths and distances in 3D space
-  - Slice: Create cross-sections through 3D data
-* **Interactive UI:** Intuitive interface with Calcite Components
-* **Real-time Updates:** Dynamic analysis updates as you interact with the map
-
-## Screenshots
-
-![image](https://github.com/user-attachments/assets/90da3c56-8c3b-46a0-a0de-4ba0880a8007)
-
-*1. Main application with analysis tools*
-
-## Prerequisites
-
-* Node.js
-* Vite
-
-## Project Setup
-
-### Initialize Project
-
-```bash
-# Create a new Vite project
-npm create vite@latest
-```
-
-Follow the instructions on screen to initialize the project.
-
-### Install Dependencies
-
-```bash
-npm install @arcgis/map-components
-```
-
-## Code Structure
-
-### HTML Structure
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-    <title>Object Analysis</title>
-  </head>
-
-  <body>
-    <arcgis-scene item-id="d6eefc2b1e984e1eaf1c290588a52c55">
-      <arcgis-zoom position="top-left"></arcgis-zoom>
-      <arcgis-navigation-toggle position="top-left"></arcgis-navigation-toggle>
-      <arcgis-compass position="top-left"> </arcgis-compass>
-      <arcgis-placement position="top-right">
-        <div id="divMenu" class="esri-widget" style="display: none">
-          <h3>Object Analysis</h3>
-          <calcite-action-bar id="calciteActionBar" layout="horizontal" expand-disabled>
-          </calcite-action-bar>
-          <calcite-label id="calcitePromptText">Choose an analysis type.</calcite-label>
-          <calcite-label id="calciteSelectionPromptText" style="display: none">
-            <em> To edit an existing analysis, select it by hovering over and clicking on its manipulator.</em>
-          </calcite-label>
-          <div id="calciteButtons" style="display: none">
-            <calcite-button id="calciteClearButton" appearance="outline-fill" kind="neutral">Clear</calcite-button>
-            <calcite-button id="calciteDoneButton">Done</calcite-button>
-          </div>
-        </div>
-      </arcgis-placement>
-    </arcgis-scene>
-
-    <script type="module" src="./src/main.ts"></script>
-    </body>
-</html>
-
-```
-
-### CSS Styling
-
-```css
-@import "https://js.arcgis.com/calcite-components/3.2.1/calcite.css";
-@import "https://js.arcgis.com/4.33/esri/themes/light/main.css";
-@import "https://js.arcgis.com/4.33/map-components/main.css";
-
-html,
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-h3 {
-  margin: 5px 0 7px 0;
-}
-
-#divMenu {
-  padding: 0.8em;
-  width: 310px;
-  background: var(--calcite-color-foreground-1);
-}
-
-#divMenu calcite-action {
-  --calcite-action-background-color: var(--calcite-color-foreground-2);
-  --calcite-action-background-color-hover: var(--calcite-color-foreground-1);
-  --calcite-action-background-color-press: var(--calcite-color-foreground-3);
-}
-
-#divMenu calcite-label {
-  margin-top: 10px;
-  --calcite-label-margin-bottom: 0;
-}
-
-#calciteButtons calcite-button {
-  width: 100%;
-  margin-top: 10px;
-}
-
-```
-
-### TypeScript Implementation
-
-1. **Import the required modules**
-
-```typescript
 import "./style.css";
 
 import "@arcgis/map-components/components/arcgis-scene";
@@ -165,11 +28,7 @@ import LineOfSightAnalysisView3D from "@arcgis/core/views/3d/analysis/LineOfSigh
 import ViewshedAnalysisView3D from "@arcgis/core/views/3d/analysis/ViewshedAnalysisView3D";
 import DimensionAnalysisView3D from "@arcgis/core/views/3d/analysis/DimensionAnalysisView3D";
 import SliceAnalysisView3D from "@arcgis/core/views/3d/analysis/SliceAnalysisView3D";
-```
 
-2. **Setup the global variables and get the DOM elements**
-
-```typescript
 let activeTool:
     | {
         name: string;
@@ -252,11 +111,8 @@ const doneButton: HTMLCalciteButtonElement | null =
 if (!doneButton) {
   throw new Error("Done button element not found");
 }
-```
 
-3. **Setup the analysis tools and their creation functions**
-
-```typescript
+// Array of all the analysis tools used in the sample.
 const tools = [
   {
     name: "Area measurement",
@@ -396,11 +252,8 @@ function createDimensionAnalysis(): DimensionAnalysis | null {
     ],
   });
 }
-```
 
-4. **Setup the UI and add event listeners to the buttons**
-
-```typescript
+// Setup the UI/UX and add the programamtically created analysis to the analyses collection.
 for (const tool of tools) {
   const actionElement = setupActionElement(tool);
   actionBar.appendChild(actionElement);
@@ -418,11 +271,7 @@ scene.addEventListener("arcgisViewKeyDown", (event) => {
     stopActiveTool();
   }
 });
-```
 
-5. **Wait for the view to be ready and add the analysis to the analyses collection**
-
-```typescript
 // Wait for the view to be ready and add the analysis to the analyses collection.
 await scene.viewOnReady();
 await Promise.all([
@@ -435,11 +284,7 @@ await Promise.all([
   }),
 ]);
 menu.style.display = "block";
-```
 
-6. **Create functions for the event listeners and UI updates**
-
-```typescript
 // Setup the action element for each analysis tool.
 function setupActionElement(
   tool:
@@ -614,11 +459,8 @@ function updateUI(actionElement: HTMLCalciteActionElement | null) {
     selectionPromptText.style.display = "none";
   }
 }
-```
 
-7. **Check if any analyses are present**
-
-```typescript
+// Check if there is any analysis present.
 function checkIfAnalysisPresent() {
   const analysis = activeTool?.analysis;
   if (!analysis) {
@@ -641,12 +483,9 @@ function checkIfAnalysisPresent() {
       return false;
   }
 }
-```
 
-8. **Place the analyses continously**
-
-```typescript
-sync function placeContinuous() {
+// Place the analysis continuously.
+async function placeContinuous() {
   abortController?.abort();
   abortController = new AbortController();
   const { signal } = abortController;
@@ -665,11 +504,8 @@ sync function placeContinuous() {
     }
   }
 }
-```
 
-9. **Clear the analysis**
-
-```typescript
+// Clear the analysis.
 function clearAnalysis(
   analysis:
     | AreaMeasurementAnalysis
@@ -707,11 +543,8 @@ function clearAnalysis(
       break;
   }
 }
-```
 
-10. **Helper functions for creating points and checking errors**
-
-```typescript
+// Helper functions for creating points and checking errors.
 function newPoint(x: number, y: number, z: number) {
   return new Point({
     x,
@@ -732,19 +565,3 @@ function throwIfNotAbortError(error: __esri.Error) {
 function analysisTypeToName(text: string) {
   return text.replace(/-/g, " ");
 }
-```
-
-## Running the Application
-
-1. **Development Server**
-
-```bash
-npm run dev
-```
-
-This will start the development server at `http://localhost:5173`
-
-2. **Build for Production**
-```bash
-npm run build
-```
